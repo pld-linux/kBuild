@@ -51,7 +51,8 @@ The goals of the kBuild framework:
 - Non-recursive makefile method by using sub-makefiles
 
 %prep
-%setup -q -n %{name}
+%setup -qc
+mv %{name} .tmp; mv .tmp/* .
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
