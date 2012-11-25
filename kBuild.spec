@@ -59,13 +59,8 @@ KBUILD_SVN_REV := %{svnrev}
 KBUILD_SVN_URL := http://svn.netlabs.org/repos/kbuild/trunk
 EOF
 
-# The bootstrap would probably not be needed if we depended on ourselves,
-# yet it is not guarranteed that new versions are compilable with older
-# kmk versions, so with this we are on a safer side
-find -name config.log -delete
-
 %build
-%define bootstrap_mflags \\\
+%define bootstrap_mflags %{?_smp_mflags} \\\
 		CC="%{__cc}" \\\
 		TOOL_GCC3_CC="%{__cc}" \\\
 		CFLAGS="%{rpmcflags}"			\\\
