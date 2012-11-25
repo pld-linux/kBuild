@@ -1,4 +1,5 @@
 %define		patchlevel r1
+%define		svnrev 2537
 Summary:	A cross-platform build environment
 Name:		kBuild
 Version:	0.1.98
@@ -10,7 +11,8 @@ URL:		http://svn.netlabs.org/kbuild
 #Source0:        ftp://ftp.netlabs.org/pub/kbuild/%{name}-%{version}%{?patchlevel:-%{patchlevel}}-src.tar.gz
 # svn co -e2537 http://svn.netlabs.org/repos/kbuild/trunk@2537 kBuild
 # tar czf kBuild-r2537.tar.gz --exclude .svn kBuild
-Source0:	%{name}-r2537.tar.gz
+Source0:	%{name}-r%{svnrev}.tar.gz
+# Source0-md5:	4890acabce44bb9c94f1211eca1c135c
 Patch0:		%{name}-0.1.3-escape.patch
 Patch1:		%{name}-0.1.5-dprintf.patch
 Patch2:		%{name}-0.1.5-pthread.patch
@@ -47,6 +49,11 @@ The goals of the kBuild framework:
 
 # Remove prebuilt stuff
 %{__rm} -r kBuild/bin/*
+
+cat > SvnInfo.kmk << EOF
+KBUILD_SVN_REV := %{svnrev}
+KBUILD_SVN_URL := http://svn.netlabs.org/repos/kbuild/trunk
+EOF
 
 # The bootstrap would probably not be needed if we depended on ourselves,
 # yet it is not guarranteed that new versions are compilable with older
