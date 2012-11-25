@@ -1,9 +1,12 @@
-%define		patchlevel r1
+#
+# Conditional build:
+%bcond_with	bootstrap		# build boostrap
+
 %define		svnrev 2537
 Summary:	A cross-platform build environment
 Name:		kBuild
-Version:	0.1.98
-Release:	3%{?patchlevel:.%{patchlevel}}
+Version:	0.1.999
+Release:	1
 Group:		Development/Tools
 # Most tools are from NetBSD, some are from FreeBSD, and make and sed are from GNU
 License:	BSD and GPL v2+
@@ -17,6 +20,7 @@ Patch0:		%{name}-0.1.3-escape.patch
 Patch1:		%{name}-0.1.5-dprintf.patch
 Patch2:		%{name}-0.1.5-pthread.patch
 BuildRequires:	acl-devel
+%{!?with_bootstrap:BuildRequires:	kBuild}
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	byacc
@@ -74,6 +78,9 @@ find -name config.log -delete
 		MY_INST_MODE=0644			   \\\
 		MY_INST_BIN_MODE=0755
 
+ver=$(awk '/^KBUILD_VERSION =/{print $3}' Config.kmk)
+test "$ver" = %{version}
+
 cd src/kmk
 %{__libtoolize}
 %{__aclocal} -I config
@@ -82,8 +89,10 @@ cd src/kmk
 %{__automake}
 cd -
 
+%if %{with bootstrap}
 kBuild/env.sh --full \
 	%{__make} -f bootstrap.gmk %{bootstrap_mflags}
+%endif
 
 kBuild/env.sh kmk %{mflags} rebuild
 
