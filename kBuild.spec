@@ -28,8 +28,16 @@ This is a GNU make fork with a set of scripts to simplify complex
 tasks and portable versions of various UNIX tools to ensure
 cross-platform portability.
 
-It is used mainly to build VirtualBox OSE packages for RPM Fusion
-repository.
+The goals of the kBuild framework:
+ - Similar behavior across all supported platforms
+- Flexibility, don't create unnecessary restrictions preventing ad-hoc
+  solutions
+- Makefiles can be simple to write and maintain
+- One configuration file for a subtree automatically included
+- Target configuration templates as the primary mechanism for makefile
+  simplification
+- Tools and SDKs for helping out the templates with flexibility
+- Non-recursive makefile method by using sub-makefiles
 
 %prep
 %setup -q -n %{name}
@@ -38,7 +46,7 @@ repository.
 %patch2 -p1
 
 # Remove prebuilt stuff
-rm -rf kBuild/bin/*
+%{__rm} -r kBuild/bin/*
 
 # The bootstrap would probably not be needed if we depended on ourselves,
 # yet it is not guarranteed that new versions are compilable with older
@@ -46,8 +54,10 @@ rm -rf kBuild/bin/*
 find -name config.log -delete
 
 %build
-%define bootstrap_mflags %{_smp_mflags} \\\
-		CFLAGS="%{optflags}"			\\\
+%define bootstrap_mflags \\\
+		CC="%{__cc}" \\\
+		TOOL_GCC3_CC="%{__cc}" \\\
+		CFLAGS="%{rpmcflags}"			\\\
 		KBUILD_VERBOSE=2				\\\
 		KBUILD_VERSION_PATCH=999
 
