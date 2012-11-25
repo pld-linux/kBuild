@@ -110,7 +110,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc COPYING ChangeLog
+%doc ChangeLog
 %doc kBuild/doc/COPYING-FDL-1.3 kBuild/doc/QuickReference*
 %attr(755,root,root) %{_bindir}/kDepIDB
 %attr(755,root,root) %{_bindir}/kDepObj
