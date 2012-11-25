@@ -7,7 +7,7 @@
 Summary:	A cross-platform build environment
 Name:		kBuild
 Version:	0.1.9998
-Release:	1
+Release:	2
 Group:		Development/Tools
 # Most tools are from NetBSD, some are from FreeBSD, and make and sed are from GNU
 License:	BSD and GPL v2+
@@ -18,6 +18,7 @@ Source1:	get-source.sh
 Patch0:		%{name}-0.1.3-escape.patch
 Patch1:		%{name}-0.1.5-dprintf.patch
 Patch2:		%{name}-0.1.5-pthread.patch
+Patch3:		re_string_fetch_byte_case-not-pure-attribute.patch
 BuildRequires:	acl-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -57,6 +58,7 @@ mv %{name} .tmp; mv .tmp/* .
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 cat > SvnInfo.kmk << EOF
 KBUILD_SVN_REV := %{svnrev}
