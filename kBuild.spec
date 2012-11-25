@@ -1,6 +1,7 @@
 #
 # Conditional build:
 %bcond_with	bootstrap		# build boostrap
+%bcond_without	verbose		# disable verbose build
 
 %define		svnrev 2577
 Summary:	A cross-platform build environment
@@ -65,22 +66,19 @@ EOF
 %{__sed} -i -e 's@_LDFLAGS\.%{kbuild_arch}*.*=@& %{rpmldflags}@g' Config.kmk
 
 %build
-%define bootstrap_mflags %{?_smp_mflags} \\\
-		CC="%{__cc}" \\\
-		TOOL_GCC3_CC="%{__cc}" \\\
-		CFLAGS="%{rpmcflags}"			\\\
-		KBUILD_VERBOSE=2				\\\
-		KBUILD_VERSION_PATCH=999
+%define bootstrap_mflags %{?_smp_mflags} %{?with_verbose:KBUILD_VERBOSE=2} \\\
+		CC="%{__cc}" TOOL_GCC3_CC="%{__cc}" CFLAGS="%{rpmcflags}"
 
-%define mflags %{bootstrap_mflags}      \\\
-		NIX_INSTALL_DIR=%{_prefix}	  \\\
-		BUILD_TYPE=release			  \\\
-		MY_INST_MODE=0644			   \\\
+%define mflags %{bootstrap_mflags} \\\
+		NIX_INSTALL_DIR=%{_prefix} \\\
+		BUILD_TYPE=release \\\
+		MY_INST_MODE=0644 \\\
 		MY_INST_BIN_MODE=0755
 
 ver=$(awk '/^KBUILD_VERSION =/{print $3}' Config.kmk)
 test "$ver" = %{version}
 
+%if %{with bootstrap}
 cd src/kmk
 %{__libtoolize}
 %{__aclocal} -I config
@@ -95,16 +93,17 @@ cd ../sed
 %{__automake}
 cd ../..
 
-%if %{with bootstrap}
 kBuild/env.sh --full \
 	%{__make} -f bootstrap.gmk %{bootstrap_mflags}
+
+kBuild/env.sh kmk clean
 %endif
 
-kBuild/env.sh kmk %{mflags} rebuild
+kBuild/env.sh kmk %{mflags} all \
+	PATH_INS=$RPM_BUILD_ROOT
 
 %install
 rm -rf $RPM_BUILD_ROOT
-export KBUILD_VERBOSE=2
 kBuild/env.sh kmk %{mflags} install \
 	PATH_INS=$RPM_BUILD_ROOT
 
