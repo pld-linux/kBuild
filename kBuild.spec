@@ -2,32 +2,37 @@
 # Conditional build:
 %bcond_with	bootstrap		# build boostrap
 
-%define		svnrev 2537
+%define		svnrev 2577
 Summary:	A cross-platform build environment
 Name:		kBuild
-Version:	0.1.999
+Version:	0.1.9998
 Release:	1
 Group:		Development/Tools
 # Most tools are from NetBSD, some are from FreeBSD, and make and sed are from GNU
 License:	BSD and GPL v2+
 URL:		http://svn.netlabs.org/kbuild
-#Source0:        ftp://ftp.netlabs.org/pub/kbuild/%{name}-%{version}%{?patchlevel:-%{patchlevel}}-src.tar.gz
-# svn co -e2537 http://svn.netlabs.org/repos/kbuild/trunk@2537 kBuild
-# tar czf kBuild-r2537.tar.gz --exclude .svn kBuild
-Source0:	%{name}-r%{svnrev}.tar.gz
-# Source0-md5:	4890acabce44bb9c94f1211eca1c135c
+Source0:	%{name}-r%{svnrev}.tar.bz2
+# Source0-md5:	d2ae623626f1e464333c384a2465a77a
+Source1:	get-source.sh
 Patch0:		%{name}-0.1.3-escape.patch
 Patch1:		%{name}-0.1.5-dprintf.patch
 Patch2:		%{name}-0.1.5-pthread.patch
 BuildRequires:	acl-devel
-%{!?with_bootstrap:BuildRequires:	kBuild}
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	byacc
 BuildRequires:	cvs
 BuildRequires:	flex
 BuildRequires:	gettext-devel
+%{!?with_bootstrap:BuildRequires:	kBuild}
+ExclusiveArch:	%{x8664} %{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%ifarch %{x8664}
+%define		kbuild_arch	amd64
+%else
+%define		kbuild_arch	x86
+%endif
 
 %description
 This is a GNU make fork with a set of scripts to simplify complex
@@ -51,13 +56,12 @@ The goals of the kBuild framework:
 %patch1 -p1
 %patch2 -p1
 
-# Remove prebuilt stuff
-%{__rm} -r kBuild/bin/*
-
 cat > SvnInfo.kmk << EOF
 KBUILD_SVN_REV := %{svnrev}
 KBUILD_SVN_URL := http://svn.netlabs.org/repos/kbuild/trunk
 EOF
+
+%{__sed} -i -e 's@_LDFLAGS\.%{kbuild_arch}*.*=@& %{rpmldflags}@g' Config.kmk
 
 %build
 %define bootstrap_mflags %{?_smp_mflags} \\\
@@ -82,7 +86,13 @@ cd src/kmk
 %{__autoconf}
 %{__autoheader}
 %{__automake}
-cd -
+cd ../sed
+%{__libtoolize}
+%{__aclocal} -I config
+%{__autoconf}
+%{__autoheader}
+%{__automake}
+cd ../..
 
 %if %{with bootstrap}
 kBuild/env.sh --full \
