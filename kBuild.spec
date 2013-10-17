@@ -3,17 +3,18 @@
 %bcond_with	bootstrap		# build boostrap
 %bcond_without	verbose		# disable verbose build
 
-%define		svnrev 2577
+%define		ver	0.1.9998
+%define		svnrev	2700
 Summary:	A cross-platform build environment
 Name:		kBuild
-Version:	0.1.9998
-Release:	2
+Version:	%{ver}.%{svnrev}
+Release:	1
 Group:		Development/Tools
 # Most tools are from NetBSD, some are from FreeBSD, and make and sed are from GNU
 License:	BSD and GPL v2+
 URL:		http://svn.netlabs.org/kbuild
 Source0:	%{name}-r%{svnrev}.tar.bz2
-# Source0-md5:	d2ae623626f1e464333c384a2465a77a
+# Source0-md5:	7c394fbe248f903d0bc1aabd235dc0a9
 Source1:	get-source.sh
 Patch0:		%{name}-0.1.3-escape.patch
 Patch1:		%{name}-0.1.5-dprintf.patch
@@ -78,7 +79,7 @@ EOF
 		MY_INST_BIN_MODE=0755
 
 ver=$(awk '/^KBUILD_VERSION =/{print $3}' Config.kmk)
-test "$ver" = %{version}
+test "$ver" = %{ver}
 
 %if %{with bootstrap}
 cd src/kmk
