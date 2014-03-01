@@ -43,7 +43,7 @@ tasks and portable versions of various UNIX tools to ensure
 cross-platform portability.
 
 The goals of the kBuild framework:
- - Similar behavior across all supported platforms
+- Similar behavior across all supported platforms
 - Flexibility, don't create unnecessary restrictions preventing ad-hoc
   solutions
 - Makefiles can be simple to write and maintain
