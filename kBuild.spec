@@ -26,7 +26,7 @@ BuildRequires:	automake
 BuildRequires:	byacc
 BuildRequires:	cvs
 BuildRequires:	flex
-BuildRequires:	gettext-devel
+BuildRequires:	gettext-tools
 %{!?with_bootstrap:BuildRequires:	kBuild}
 ExclusiveArch:	%{x8664} %{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
