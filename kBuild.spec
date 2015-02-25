@@ -26,6 +26,7 @@ BuildRequires:	automake
 BuildRequires:	byacc
 BuildRequires:	cvs
 BuildRequires:	flex
+BuildRequires:	gettext-autopoint
 BuildRequires:	gettext-tools
 %{!?with_bootstrap:BuildRequires:	kBuild}
 ExclusiveArch:	%{x8664} %{ix86}
