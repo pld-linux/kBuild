@@ -8,7 +8,7 @@
 Summary:	A cross-platform build environment
 Name:		kBuild
 Version:	%{ver}.%{svnrev}
-Release:	1
+Release:	2
 Group:		Development/Tools
 # Most tools are from NetBSD, some are from FreeBSD, and make and sed are from GNU
 License:	BSD and GPL v2+
@@ -29,7 +29,6 @@ BuildRequires:	flex
 BuildRequires:	gettext-autopoint
 BuildRequires:	gettext-tools
 %{!?with_bootstrap:BuildRequires:	kBuild}
-ExclusiveArch:	%{x8664} %{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %ifarch %{x8664}
