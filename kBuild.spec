@@ -21,14 +21,17 @@ Patch1:		%{name}-0.1.5-dprintf.patch
 Patch2:		%{name}-0.1.5-pthread.patch
 Patch3:		re_string_fetch_byte_case-not-pure-attribute.patch
 BuildRequires:	acl-devel
+BuildRequires:	byacc
+BuildRequires:	flex
+%if %{with bootstrap}
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	byacc
-BuildRequires:	cvs
-BuildRequires:	flex
 BuildRequires:	gettext-autopoint
-BuildRequires:	gettext-tools
-%{!?with_bootstrap:BuildRequires:	kBuild}
+BuildRequires:	libtool
+BuildRequires:	texinfo
+%else
+BuildRequires:	kBuild
+%endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %ifarch %{x8664}
