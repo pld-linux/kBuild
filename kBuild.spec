@@ -12,7 +12,6 @@ Release:	2
 Group:		Development/Tools
 # Most tools are from NetBSD, some are from FreeBSD, and make and sed are from GNU
 License:	BSD and GPL v2+
-URL:		http://svn.netlabs.org/kbuild
 Source0:	%{name}-r%{svnrev}.tar.bz2
 # Source0-md5:	7c394fbe248f903d0bc1aabd235dc0a9
 Source1:	get-source.sh
@@ -20,6 +19,7 @@ Patch0:		%{name}-0.1.3-escape.patch
 Patch1:		%{name}-0.1.5-dprintf.patch
 Patch2:		%{name}-0.1.5-pthread.patch
 Patch3:		re_string_fetch_byte_case-not-pure-attribute.patch
+URL:		http://svn.netlabs.org/kbuild
 BuildRequires:	acl-devel
 BuildRequires:	byacc
 BuildRequires:	flex
