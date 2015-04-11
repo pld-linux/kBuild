@@ -1,11 +1,12 @@
 #
 # Conditional build:
-%bcond_with	bootstrap		# build boostrap
+%bcond_with	bootstrap	# build boostrap
 %bcond_without	verbose		# disable verbose build
 
 %define		ver	0.1.9998
 %define		svnrev	2700
 Summary:	A cross-platform build environment
+Summary(pl.UTF-8):	Wieloplatformowe środowisko budowania
 Name:		kBuild
 Version:	%{ver}.%{svnrev}
 Release:	3
@@ -20,16 +21,16 @@ Patch1:		%{name}-0.1.5-dprintf.patch
 Patch2:		%{name}-0.1.5-pthread.patch
 Patch3:		re_string_fetch_byte_case-not-pure-attribute.patch
 Patch4:		x32.patch
+Patch5:		%{name}-bison.patch
 URL:		http://svn.netlabs.org/kbuild
 BuildRequires:	acl-devel
-BuildRequires:	byacc
+BuildRequires:	bison
 BuildRequires:	flex
 %if %{with bootstrap}
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	gettext-autopoint
-BuildRequires:	libtool
-BuildRequires:	texinfo
+BuildRequires:	autoconf >= 2.59
+BuildRequires:	automake >= 1:1.9
+BuildRequires:	gettext-tools >= 0.14
+BuildRequires:	texinfo >= 4.0
 %else
 BuildRequires:	kBuild
 %endif
@@ -57,6 +58,22 @@ The goals of the kBuild framework:
 - Tools and SDKs for helping out the templates with flexibility
 - Non-recursive makefile method by using sub-makefiles
 
+%description -l pl.UTF-8
+Ten pakiet to odgałęzienie GNU make'a wraz z zestawem skryptów
+upraszczających złożone zadania oraz przenośnych wersji różnych 
+narzędzi uniksowych w celu zapewnienia przenośności na wiele platform.
+
+Cele środowiska kBuild to:
+- podobne zachowanie na wszystkich obsługiwanych platformach
+- elastyczność, unikanie niepotrzebnych ograniczeń blokujących
+  rozwiązania doraźne
+- proste do napisania i utrzymania pliki Makefile
+- automatyczne dołączanie jednego pliku konfiguracyjnego na poddrzewo
+- szablony konfiguracji docelowej jako główny mechanizm upraszczający
+  pliki Makefile
+- narzędzia i SDK wspomagające szablony elastycznością
+- nierekurencyjny system wykorzystujący podpliki Makefile
+
 %prep
 %setup -qc
 mv %{name} .tmp; mv .tmp/* .
@@ -65,6 +82,7 @@ mv %{name} .tmp; mv .tmp/* .
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 cat > SvnInfo.kmk << EOF
 KBUILD_SVN_REV := %{svnrev}
@@ -95,13 +113,12 @@ test "$ver" = %{ver}
 
 %if %{with bootstrap}
 cd src/kmk
-%{__libtoolize}
 %{__aclocal} -I config
 %{__autoconf}
 %{__autoheader}
 %{__automake}
 cd ../sed
-%{__libtoolize}
+%{__gettextize}
 %{__aclocal} -I config
 %{__autoconf}
 %{__autoheader}
@@ -109,7 +126,8 @@ cd ../sed
 cd ../..
 
 kBuild/env.sh --full \
-	%{__make} -f bootstrap.gmk %{bootstrap_mflags}
+	%{__make} -f bootstrap.gmk %{bootstrap_mflags} \
+		AUTORECONF=:
 
 kBuild/env.sh kmk clean
 %endif

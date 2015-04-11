@@ -1,0 +1,13 @@
+--- kBuild-0.1.9998.2700/src/kash/Makefile.kmk.orig	2013-10-17 13:13:05.000000000 +0200
++++ kBuild-0.1.9998.2700/src/kash/Makefile.kmk	2015-04-10 22:47:10.001420359 +0200
+@@ -164,8 +164,8 @@
+ kash_USES = lex yacc
+ kash_LEXTOOL = FLEX
+ kash_LEXFLAGS = -8
+-#kash_YACCTOOL = BISON
+-kash_YACCTOOL = YACC
++kash_YACCTOOL = BISON
++#kash_YACCTOOL = YACC
+ kash_YACCFLAGS = -ld
+ kash_SOURCES += \
+ 	arith.y \
