@@ -4,7 +4,7 @@
 %bcond_without	verbose		# disable verbose build
 
 %define		ver	0.1.9998
-%define		svnrev	2814
+%define		svnrev	3127
 Summary:	A cross-platform build environment
 Summary(pl.UTF-8):	Wieloplatformowe środowisko budowania
 Name:		kBuild
@@ -14,7 +14,7 @@ Group:		Development/Tools
 # Most tools are from NetBSD, some are from FreeBSD, and make and sed are from GNU
 License:	BSD and GPL v2+
 Source0:	%{name}-r%{svnrev}.tar.bz2
-# Source0-md5:	ff69b9b96c548bb87eae37936246bce2
+# Source0-md5:	a4b4d66b7714f74cabfc54a57a88ef6f
 Source1:	get-source.sh
 Patch0:		%{name}-0.1.3-escape.patch
 Patch1:		%{name}-0.1.5-pthread.patch
@@ -173,6 +173,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/kmk_sleep
 %attr(755,root,root) %{_bindir}/kmk_test
 %attr(755,root,root) %{_bindir}/kmk_time
+%attr(755,root,root) %{_bindir}/kmk_touch
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/*.kmk
 %dir %{_datadir}/%{name}/msgstyles
