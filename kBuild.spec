@@ -4,7 +4,7 @@
 %bcond_without	verbose		# disable verbose build
 
 %define		ver	0.1.9998
-%define		svnrev	3127
+%define		svnrev	3598
 Summary:	A cross-platform build environment
 Summary(pl.UTF-8):	Wieloplatformowe środowisko budowania
 Name:		kBuild
@@ -14,12 +14,13 @@ Group:		Development/Tools
 # Most tools are from NetBSD, some are from FreeBSD, and make and sed are from GNU
 License:	BSD and GPL v2+
 Source0:	%{name}-r%{svnrev}.tar.bz2
-# Source0-md5:	a4b4d66b7714f74cabfc54a57a88ef6f
+# Source0-md5:	902991c327b2cc93cc6da642e70a08e2
 Source1:	get-source.sh
 Patch0:		%{name}-0.1.3-escape.patch
 Patch1:		%{name}-0.1.5-pthread.patch
 Patch2:		x32.patch
 Patch3:		%{name}-bison.patch
+Patch4:		quote-defs.patch
 URL:		http://svn.netlabs.org/kbuild
 BuildRequires:	acl-devel
 BuildRequires:	bison
@@ -79,6 +80,7 @@ mv %{name} .tmp; mv .tmp/* .
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 cat > SvnInfo.kmk << EOF
 KBUILD_SVN_REV := %{svnrev}
@@ -146,6 +148,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc ChangeLog
 %doc kBuild/doc/COPYING-FDL-1.3 kBuild/doc/QuickReference*
+%attr(755,root,root) %{_bindir}/bld_signames
 %attr(755,root,root) %{_bindir}/kDepIDB
 %attr(755,root,root) %{_bindir}/kDepObj
 %attr(755,root,root) %{_bindir}/kDepPre

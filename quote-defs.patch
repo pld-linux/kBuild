@@ -1,0 +1,34 @@
+--- kBuild-0.1.9998.3598/src/kmk/Makefile.am~	2023-09-06 15:56:55.000000000 +0200
++++ kBuild-0.1.9998.3598/src/kmk/Makefile.am	2023-09-06 16:05:22.530998311 +0200
+@@ -175,10 +175,10 @@
+ 	-DCONFIG_WITH_RDONLY_VARIABLE_VALUE \
+ 	-DCONFIG_WITH_LAZY_DEPS_VARS \
+ 	\
+-	-DKBUILD_TYPE=\"$(KBUILD_TYPE)\" \
+-	-DKBUILD_HOST=\"$(KBUILD_TARGET)\" \
+-	-DKBUILD_HOST_ARCH=\"$(KBUILD_TARGET_ARCH)\" \
+-	-DKBUILD_HOST_CPU=\"$(KBUILD_TARGET_CPU)\" \
++	-DKBUILD_TYPE="\\"$(KBUILD_TYPE)\\"" \
++	-DKBUILD_HOST="\\"$(KBUILD_TARGET)\\"" \
++	-DKBUILD_HOST_ARCH="\\"$(KBUILD_TARGET_ARCH)\\"" \
++	-DKBUILD_HOST_CPU="\\"$(KBUILD_TARGET_CPU)\\"" \
+ 	\
+ 	-DKBUILD_SVN_REV=1 \
+ 	-DKBUILD_VERSION_MAJOR=0 \
+--- kBuild-0.1.9998.3598/Config.kmk~	2023-09-06 16:08:07.000000000 +0200
++++ kBuild-0.1.9998.3598/Config.kmk	2023-09-06 16:11:55.533986583 +0200
+@@ -123,13 +123,7 @@
+ if1of ($(KBUILD_TARGET), openbsd)
+  TOOL_FLEX_LEX = gflex
+ endif
+-# Not all compiler tools currently do the same quoting of DEFS, so here's a
+-# temporary workaround.
+-ifn1of ($(KBUILD_TARGET), win)
+- TMP_QUOTE_SLASH :=
+-else
+- TMP_QUOTE_SLASH := \$(NO_SUCH_VARIABLE)
+-endif
++TMP_QUOTE_SLASH := \"
+ 
+ #
+ # The OS and Architecture indicators.
